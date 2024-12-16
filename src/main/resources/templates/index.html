@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>꼼마 필름</title>
+    <style>
+        /* 전체 배경과 레이아웃 */
+        body {
+            background-color: #fff;
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* 헤더 스타일 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .header .logo {
+            font-size: 24px;
+            color: #4d7c2a;
+            font-weight: bold;
+        }
+
+        .header nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .basket-button {
+            background-color: #4d7c2a;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        /* 검색 섹션 */
+        .search-section {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .search-section input {
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .search-section .filter select {
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+
+        .search-icon {
+            cursor: pointer;
+        }
+
+        /* 제품 리스트 */
+        .product-list {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .product-card {
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 300px;
+            cursor: pointer;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 10px;
+        }
+
+        .product-info .code {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .price {
+            color: #4d7c2a;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .desc {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* 모달 창 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .modal img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .modal .price {
+            font-size: 20px;
+            color: #4d7c2a;
+            margin-bottom: 10px;
+        }
+
+        .modal .close-btn {
+            background-color: #4d7c2a;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .modal .close-btn:hover {
+            background-color: #3c6634;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="logo">꼼마 필름</div>
+    </header>
+
+    <!-- 검색 및 필터 -->
+    <section class="search-section">
+        <div class="filter">
+            <select id="brandSelect">
+                <option value="">전체</option> <!-- 옵션에 value 값을 추가 -->
+            </select>
+        </div>
+        <input type="text" id="searchInput" placeholder="검색할 내용을 입력해주세요." />
+        <span class="search-icon" id="searchIcon">🔍</span>
+    </section>
+
+    <!-- 제품 리스트 -->
+    <section class="product-list" id="productList">
+        <!-- 초기 제품 리스트 -->
+    </section>
+</div>
+
+<!-- 모달 창 -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <img id="modalImage" src="" alt="제품 이미지">
+        <p id="modalUrl" class="url"></p>
+        <p id="modalPrice" class="price"></p>
+        <button class="close-btn" onclick="closeModal()">닫기</button>
+    </div>
+</div>
+
+<script>
+    let isLoading = false; // 요청 중인지 확인하는 변수
+    let currentPage = 0;   // 현재 페이지
+    let totalPages = 1;    // 전체 페이지 수 (기본값은 1)
+    const pageSize = 10;   // 한 페이지 당 표시할 항목 수
+
+    // 브랜드를 가져오는 함수
+    async function fetchBrands() {
+        try {
+            const response = await fetch('http://localhost:8080/comma-film/brand');
+            const data = await response.json();
+
+            if (data.status === 200) {
+                const selectElement = document.getElementById('brandSelect');
+                data.data.forEach(brand => {
+                    const option = document.createElement('option');
+                    option.value = brand.sn;
+                    option.textContent = brand.name;
+                    selectElement.appendChild(option);
+                });
+            } else {
+                console.error('API 호출 실패:', data.message);
+            }
+        } catch (error) {
+            console.error('API 호출 중 오류 발생:', error);
+        }
+    }
+
+    // 필터와 검색어를 기준으로 제품을 가져오는 함수
+    async function fetchFilms() {
+        if (isLoading || currentPage >= totalPages) return; // 요청 중이거나, 마지막 페이지에 도달하면 중지
+        isLoading = true; // 요청 시작
+
+        const brandSn = document.getElementById('brandSelect').value; // 선택된 브랜드 ID
+        const searchQuery = document.getElementById('searchInput').value.trim(); // 검색어
+
+        try {
+            const url = `http://localhost:8080/comma-film/film?brandSn=${brandSn}&code=${searchQuery}&page=${currentPage}&size=${pageSize}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.status === 200 && data.data.content.length > 0) {
+                const productListElement = document.getElementById('productList');
+
+                // 새로운 제품들을 추가
+                data.data.content.forEach(film => {
+                    const productCard = document.createElement('div');
+                    productCard.classList.add('product-card');
+
+                    const productImage = document.createElement('img');
+                    productImage.src = film.filmImageUrl;
+                    productImage.alt = film.filmName;
+                    productImage.classList.add('product-image');
+                    productImage.onclick = () => openModal(film); // 이미지 클릭 시 모달 열기
+
+                    const productInfo = document.createElement('div');
+                    productInfo.classList.add('product-info');
+
+                    const brandInfo = document.createElement('strong');
+                    brandInfo.innerHTML = `${film.brandName} <span class="code">${film.filmCode}</span>`;
+
+                    const price = document.createElement('p');
+                    price.classList.add('price');
+                    price.textContent = film.filmConsumerPrice > 0 ? `${film.filmConsumerPrice} 원` : '가격 미정';
+
+                    const description = document.createElement('p');
+                    description.classList.add('desc');
+                    description.textContent = film.filmColor;
+
+                    // HTML 구조에 추가
+                    productInfo.appendChild(brandInfo);
+                    productInfo.appendChild(price);
+                    productInfo.appendChild(description);
+
+                    productCard.appendChild(productImage);
+                    productCard.appendChild(productInfo);
+
+                    productListElement.appendChild(productCard);
+                });
+
+                // 전체 페이지 수와 현재 페이지 갱신
+                totalPages = data.data.totalPages;
+                currentPage++; // 페이지 증가
+            } else {
+                console.log('No films found');
+                document.getElementById('productList').innerHTML = '검색 결과가 없습니다.';
+            }
+        } catch (error) {
+            console.error('API 호출 중 오류 발생:', error);
+        } finally {
+            isLoading = false; // 요청 완료 후 isLoading을 false로 설정
+        }
+    }
+
+    // 스크롤 이벤트에서 페이지를 변경하고 요청 호출
+    window.addEventListener('scroll', () => {
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
+            fetchFilms(); // 스크롤이 바닥에 닿으면 호출
+        }
+    });
+
+    // 텍스트 박스에서 엔터를 입력했을 때 돋보기 클릭한 것처럼 동작하게 하는 코드
+    document.getElementById('searchInput').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            // 엔터 키가 눌렸을 때 돋보기 클릭 이벤트 트리거
+            document.getElementById('searchIcon').click();
+        }
+    });
+
+    // 돋보기 클릭 시 호출되는 함수
+    document.getElementById('searchIcon').addEventListener('click', () => {
+        currentPage = 0; // 검색을 새로 시작하면 페이지를 0으로 리셋
+        totalPages = 1;  // 전체 페이지 수 초기화
+        document.getElementById('productList').innerHTML = ''; // 기존 제품 리스트 초기화
+        fetchFilms(); // 검색어에 맞춰 첫 번째 페이지 데이터 요청
+    });
+
+    // 페이지 로드 시 브랜드 가져오기
+    window.onload = fetchBrands;
+
+    // 모달 열기 함수
+    function openModal(film) {
+        const modal = document.getElementById('modal');
+        const modalImage = document.getElementById('modalImage');
+        const modalPrice = document.getElementById('modalPrice');
+        const modalUrl = document.getElementById('modalUrl'); // 브랜드 링크를 담을 p 태그 가져오기
+
+        // 모달에 이미지와 가격 추가
+        modalImage.src = film.filmImageUrl;
+        modalPrice.textContent = film.filmMyPrice > 0 ? `${film.filmMyPrice} 원` : '가격 미정';
+
+        // 모달에 브랜드 링크 추가
+        if (film.brandUrl) {
+            modalUrl.innerHTML = `<a href="${film.brandUrl}" target="_blank">${film.brandName} 홈페이지</a>`;
+        } else {
+            modalUrl.textContent = ''; // 브랜드 링크가 없다면 빈 텍스트
+        }
+
+        modal.style.display = 'flex'; // 모달 표시
+    }
+
+
+
+    // 모달 닫기 함수
+    function closeModal() {
+        const modal = document.getElementById('modal');
+        modal.style.display = 'none'; // 모달 닫기
+    }
+</script>
+</body>
+</html>
