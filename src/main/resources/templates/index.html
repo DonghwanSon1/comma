@@ -76,6 +76,7 @@
             display: flex;
             gap: 20px;
             flex-wrap: wrap;
+            padding: 10px;
         }
 
         .product-card {
@@ -160,6 +161,18 @@
         .modal .close-btn:hover {
             background-color: #3c6634;
         }
+
+        footer {
+            background-color: #4d7c2a;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 18px;
+            font-weight: bold;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -195,7 +208,10 @@
         <button class="close-btn" onclick="closeModal()">닫기</button>
     </div>
 </div>
-
+<!-- 푸터 -->
+<footer>
+    <p>꼼꼼한 마감 | Toy Project | For Friend </p>
+</footer>
 <script>
     let isLoading = false; // 요청 중인지 확인하는 변수
     let currentPage = 0;   // 현재 페이지
