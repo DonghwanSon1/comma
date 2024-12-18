@@ -20,6 +20,16 @@ class FilmController(
     private val filmService: FilmService
 ) {
 
+  @GetMapping
+  @Operation(summary = "필름지 정보 조회", description = "필름지의 정보를 조회 합니다.")
+  fun searchFilm(@RequestParam brandSn: Long?,
+                 @RequestParam code: String?,
+                 @RequestParam(defaultValue = "0") page: Int,
+                 @RequestParam(defaultValue = "10") size: Int, ): BaseResponse<Page<FilmRs>> {
+    val pageable: Pageable = PageRequest.of(page, size)
+    return BaseResponse(data = filmService.searchFilm(brandSn, code, pageable))
+  }
+
   @PostMapping
   @Operation(summary = "필름지 정보 저장", description = "필름지의 정보를 저장 합니다.")
   fun saveFilm(@RequestBody rq: List<FilmRq>): BaseResponse<Unit> {
@@ -35,14 +45,11 @@ class FilmController(
     return BaseResponse(message = resultMsg)
   }
 
-  @GetMapping
-  @Operation(summary = "필름지 정보 조회", description = "필름지의 정보를 조회 합니다.")
-  fun searchFilm(@RequestParam brandSn: Long?,
-                 @RequestParam code: String?,
-                 @RequestParam(defaultValue = "0") page: Int,
-                 @RequestParam(defaultValue = "10") size: Int, ): BaseResponse<Page<FilmRs>> {
-    val pageable: Pageable = PageRequest.of(page, size)
-    return BaseResponse(data = filmService.searchFilm(brandSn, code, pageable))
+  @DeleteMapping("/{filmSn}")
+  @Operation(summary = "필름지 정보 삭제", description = "필름지의 정보를 삭제 합니다.")
+  fun deleteFilm(@PathVariable filmSn: Long): BaseResponse<Unit> {
+    val resultMsg: String = filmService.deleteFilm(filmSn)
+    return BaseResponse(message = resultMsg)
   }
 
 

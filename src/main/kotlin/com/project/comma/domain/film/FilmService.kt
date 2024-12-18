@@ -35,4 +35,11 @@ class FilmService(
     return result
   }
 
+  @Transactional
+  fun deleteFilm(filmSn: Long): String {
+    val entity: Film = filmRepository.findById(filmSn).orElseThrow{ CommonException(CommonExceptionCode.DOES_NOT_EXIST_FILM) }
+    filmRepository.delete(entity)
+    return "정상적으로 삭제되었습니다."
+  }
+
 }

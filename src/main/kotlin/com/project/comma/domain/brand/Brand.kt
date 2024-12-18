@@ -1,5 +1,6 @@
 package com.project.comma.domain.brand
 
+import com.project.comma.domain.brand.rqrs.BrandRq
 import javax.persistence.*
 
 @Entity
@@ -16,4 +17,20 @@ class Brand(
     @Column(name = "url", nullable = false)
     val url: String? = null,
 ) {
+    companion object {
+        fun createBrand(rq: BrandRq): Brand {
+            return Brand(
+                name = rq.name,
+                url = rq.url
+            )
+        }
+    }
+
+    fun updateBrand(rq: BrandRq): Brand {
+        return Brand(
+            sn = this.sn,
+            name = rq.name ?: this.name,
+            url = rq.url ?: this.url
+        )
+    }
 }
