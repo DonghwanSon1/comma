@@ -5,6 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>꼼마 필름</title>
     <style>
+        @media screen and (max-width: 400px) {
+            .search-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .search-section .filter {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .search-section input {
+                width: calc(100% - 40px); /* 아이콘 크기를 제외한 너비 */
+                margin: 0;
+                display: inline-block;
+            }
+
+            .search-section .search-icon {
+                display: inline-block;
+                cursor: pointer;
+            }
+
+            .search-input-section {
+                width: 100%;
+                display: flex;
+                justify-content: flex-start;
+            }
+        }
+
         /* 전체 배경과 레이아웃 */
         body {
             background-color: #fff;
@@ -49,6 +78,11 @@
         }
 
         /* 검색 섹션 */
+        .search-input-section {
+            display: flex;
+            margin: 0
+        }
+
         .search-section {
             display: flex;
             align-items: center;
@@ -169,7 +203,7 @@
             padding: 10px 0;
             font-size: 18px;
             font-weight: bold;
-            position: relative;
+            position: fixed;
             bottom: 0;
             width: 100%;
         }
@@ -189,8 +223,10 @@
                 <option value="">전체</option> <!-- 옵션에 value 값을 추가 -->
             </select>
         </div>
-        <input type="text" id="searchInput" placeholder="검색할 내용을 입력해주세요." />
-        <span class="search-icon" id="searchIcon">🔍</span>
+        <div class="search-input-section">
+            <input type="text" id="searchInput" placeholder="검색할 내용을 입력해주세요." />
+            <span class="search-icon" id="searchIcon">🔍</span>
+        </div>
     </section>
 
     <!-- 제품 리스트 -->
@@ -213,7 +249,7 @@
     <p>꼼꼼한 마감 | Toy Project | For Friend </p>
 </footer>
 <script>
-<!--    const BASE_URL = "http://localhost:8080/comma-film";-->
+    // const BASE_URL = "http://localhost:8080/comma-film";
     const BASE_URL = "http://ec2-13-125-146-134.ap-northeast-2.compute.amazonaws.com:8080/comma-film";
     let isLoading = false; // 요청 중인지 확인하는 변수
     let currentPage = 0;   // 현재 페이지
@@ -354,8 +390,6 @@
 
         modal.style.display = 'flex'; // 모달 표시
     }
-
-
 
     // 모달 닫기 함수
     function closeModal() {
