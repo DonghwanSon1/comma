@@ -23,7 +23,7 @@ pipeline {
         stage('Build and Run with Docker Compose') {
             steps {
                 dir('./comma') {
-                    bat 'docker-compose up -d'
+                    bat 'docker-compose up --build -d'
                 }
             }
         }
