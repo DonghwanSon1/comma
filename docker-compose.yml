@@ -1,15 +1,24 @@
 version: '3.8'
 
+volumes:
+  images:
+    external: true
+    name: images
+
 services:
-  comma-service:
+  comma-film-service:
     restart: on-failure
     build: .
-    image: comma:latest
-    container_name: comma-film
+    image: comma-film-service:latest
+    container_name: comma-film-service
     ports:
       - "8080:8080"
     environment:
 #      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/comma # local
-      SPRING_DATASOURCE_URL: jdbc:mysql://13.125.146.134:3306/comma # aws
+#      SPRING_DATASOURCE_URL: jdbc:mysql://13.125.146.134:3306/comma # aws
+      SPRING_DATASOURCE_URL: jdbc:mysql://dh-project.mooo.com:3306/comma # DDNS
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: admin
+ #      SPRING_DATASOURCE_PASSWORD: admin # local, aws
+      SPRING_DATASOURCE_PASSWORD: root # DDNS
+    volumes:
+      - C:/images:/images # DDNS 서버의 노트북의 디렉토리와 도커의 디렉토리 마운트 (C:/image = 노트북, /image = 도커)
