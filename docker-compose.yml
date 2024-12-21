@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  ecoNrich-service:
+    restart: on-failure
+    build: .
+    image: comma:latest
+    container_name: comma-film
+    ports:
+      - "8080:8080"
+    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/comma # local
+      SPRING_DATASOURCE_URL: jdbc:mysql://13.125.146.134:3306/comma # aws
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: admin
