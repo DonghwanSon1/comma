@@ -26,7 +26,7 @@ FROM openjdk:11-jdk
 WORKDIR /spring-boot
 
 # 9. 빌드된 JAR 파일 복사
-COPY --from=build /spring-boot/build/libs/*.jar app.jar
+COPY build/libs/*SNAPSHOT.jar app.jar
 
 ## 10. 애플리케이션 실행
 ENTRYPOINT ["java", "-jar", "/spring-boot/app.jar"]
