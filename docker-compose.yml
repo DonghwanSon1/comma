@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  ecoNrich-service:
+  comma-service:
     restart: on-failure
     build: .
     image: comma:latest
