@@ -12,7 +12,7 @@ services:
     image: comma-film-service:latest
     container_name: comma-film-service
     ports:
-      - "8080:8080"
+      - "8090:8090"
     environment:
 #      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/comma # local
 #      SPRING_DATASOURCE_URL: jdbc:mysql://13.125.146.134:3306/comma # aws
