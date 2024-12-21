@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8090
   servlet:
     context-path: /comma-film
 
@@ -38,4 +38,4 @@ logging:
 # 로컬 테스트 시 dir, imageUrl을 로컬로 변경해야함. 현재는 dir은 도커의 디렉토리고, url은 DDNS이다.
 file:
   dir: /images  #/Users/sondonghwan/Desktop/images
-  imageUrl: http://dh-project.mooo.com:8080/comma/image #http://localhost:8081/table-order/image
+  imageUrl: http://dh-project.mooo.com:8090/comma/image #http://localhost:8081/table-order/image
