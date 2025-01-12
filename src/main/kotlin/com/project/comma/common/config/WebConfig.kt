@@ -9,7 +9,7 @@ class WebConfig : WebMvcConfigurer {
 
   override fun addCorsMappings(registry: CorsRegistry) {
     registry.addMapping("/**")
-      .allowedOrigins("http://dh-project.mooo.com:8090") // 요청을 허용할 출처
+      .allowedOrigins("*") // 요청을 허용할 출처 **(임시로 모든 출처 허용함)**
       .allowedMethods("GET", "POST", "PATCH", "DELETE") // 허용할 HTTP 메서드
       .allowedHeaders("Content-Type", "Authorization")  // 모든 요청 헤더를 허용
       .exposedHeaders("Authorization") // 클라이언트에서 사용할 응답 헤더
