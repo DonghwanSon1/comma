@@ -5,6 +5,8 @@ import com.project.comma.common.exception.CommonException
 import com.project.comma.common.exception.CommonExceptionCode
 import com.project.comma.domain.film.rqrs.FilmRq
 import com.project.comma.domain.film.rqrs.FilmRs
+import com.project.comma.domain.image.ImageController
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -13,7 +15,11 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional(readOnly = true)
 class FilmService(
-    private val filmRepository: FilmRepository
+    private val filmRepository: FilmRepository,
+    private val imageController: ImageController,
+
+    @Value("\${file.imageUrl}")
+    private val serverUrl: String
 ) {
 
   @Transactional
@@ -38,6 +44,8 @@ class FilmService(
   @Transactional
   fun deleteFilm(filmSn: Long): String {
     val entity: Film = filmRepository.findById(filmSn).orElseThrow{ CommonException(CommonExceptionCode.DOES_NOT_EXIST_FILM) }
+    val image: String = entity.imageUrl!!.replace(("$serverUrl/"), "")
+    imageController.deleteImage(image)
     filmRepository.delete(entity)
     return "정상적으로 삭제되었습니다."
   }

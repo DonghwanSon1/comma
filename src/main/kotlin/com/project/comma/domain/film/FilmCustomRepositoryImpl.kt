@@ -38,6 +38,7 @@ class FilmCustomRepositoryImpl(private val queryFactory: JPAQueryFactory) : Film
             .from(film)
             .join(brand).on(film.brand.eq(brand))
             .where(builder) // 조건 추가
+            .orderBy(film.sn.desc())
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
             .fetch()

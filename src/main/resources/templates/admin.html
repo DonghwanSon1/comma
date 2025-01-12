@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+</head>
+<style>
+    /* Reset 기본 설정 */
+ body, h1, h2, h3, p, ul, li, table, th, td, div, section, header, footer, button {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+ }
+
+ body {
+     font-family: Arial, sans-serif;
+     background-color: #f9f9f9;
+     color: #333;
+     line-height: 1.6;
+     padding: 20px;
+ }
+
+ .container {
+     max-width: 1200px;
+     margin: 0 auto;
+     background-color: #fff;
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+     border-radius: 8px;
+     overflow: hidden;
+ }
+
+ /* Header 스타일 */
+ .header {
+     background-color: #007BFF;
+     color: #fff;
+     padding: 20px;
+     text-align: center;
+     font-size: 1.5em;
+     font-weight: bold;
+ }
+
+ .logo {
+     margin: 0;
+ }
+
+ /* 섹션 버튼 스타일 */
+ .category-management {
+     display: flex;
+     justify-content: center;
+     padding: 20px;
+     background-color: #f1f1f1;
+     border-bottom: 1px solid #ddd;
+ }
+
+ .category-management button {
+     background-color: #007BFF;
+     color: #fff;
+     border: none;
+     padding: 10px 20px;
+     margin: 0 10px;
+     border-radius: 5px;
+     cursor: pointer;
+     transition: background-color 0.3s ease;
+     font-size: 1em;
+ }
+
+ .category-management button:hover {
+     background-color: #0056b3;
+ }
+
+ /* 관리 섹션 스타일 */
+ .management-section {
+     padding: 20px;
+ }
+
+ .management-section h2 {
+     margin-bottom: 20px;
+     font-size: 1.5em;
+     color: #333;
+ }
+
+ .button-group {
+     margin-bottom: 20px;
+ }
+
+ .button-group button {
+     background-color: #28A745;
+     color: #fff;
+     border: none;
+     padding: 8px 15px;
+     margin: 0 5px;
+     border-radius: 5px;
+     cursor: pointer;
+     font-size: 0.9em;
+     transition: background-color 0.3s ease;
+ }
+
+ .button-group button:hover {
+     background-color: #218838;
+ }
+
+ /* 테이블 스타일 */
+ .management-section table {
+     width: 100%;
+     border-collapse: collapse;
+     margin-top: 10px;
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ }
+
+ .management-section th,
+ .management-section td {
+     border: 1px solid #ddd;
+     padding: 12px;
+     text-align: left;
+     font-size: 0.9em;
+ }
+
+ .management-section th {
+     background-color: #f1f1f1;
+     font-weight: bold;
+     text-transform: uppercase;
+ }
+
+ .management-section tr:nth-child(even) {
+     background-color: #f9f9f9;
+ }
+
+ .management-section tr:hover {
+     background-color: #f1f1f1;
+ }
+
+ .management-section img {
+     max-width: 50px;
+     height: auto;
+     border-radius: 4px;
+ }
+
+ /* 모달 기본 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10vh 0; /* 위아래에 10vh 여백을 추가하여 화면 중앙에 위치하도록 */
+}
+
+.modal-content {
+    position: relative;
+    background-color: white;
+    padding: 20px; /* 내부 여백 설정 */
+    border-radius: 8px;
+    width: 50%; /* 너비를 50%로 설정하여 모달 크기 축소 */
+    max-width: 600px; /* 최대 너비를 600px로 설정 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    overflow: hidden; /* 내용이 넘칠 경우 스크롤을 숨김 */
+    margin: auto; /* 수평 중앙 정렬 */
+    height: auto; /* 내용에 따라 높이 자동 조정 */
+    justify-content: space-between;
+}
+
+.modal-content img {
+    max-width: 50%; /* 이미지 최대 너비는 모달 크기에 맞게 */
+    max-height: 15vh; /* 이미지 최대 높이는 화면 높이의 80% */
+    object-fit: contain; /* 이미지 비율을 유지하며 크기에 맞게 조정 */
+}
+.close {
+    position: absolute; /* 부모 요소 기준 위치 지정 */
+    top: 10px;          /* 모달창 내부 상단에서의 거리 */
+    right: 10px;        /* 모달창 내부 오른쪽에서의 거리 */
+    font-size: 32px;    /* 닫기 버튼 크기 조정 */
+    font-weight: bold;  /* 글자 두께 */
+    color: #333;        /* 버튼 색상 */
+    cursor: pointer;    /* 클릭 가능한 커서 모양 */
+    transition: color 0.3s ease; /* 마우스 호버 효과 */
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+
+/* 모달 제목 */
+.modal-content h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    color: #333333;
+}
+
+/* 입력 필드 그룹 */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+/* 입력 필드 라벨 */
+.form-group label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #555555;
+}
+
+/* 입력 필드 */
+.form-group input {
+    width: 100%; /* 부모 컨테이너의 너비에 맞게 확장 */
+    max-width: 100%; /* 최대 너비를 100%로 설정하여 모달 크기를 넘지 않도록 */
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s;
+    box-sizing: border-box; /* 패딩과 보더를 포함하여 너비 계산 */
+}
+
+.form-group input:focus {
+    border-color: #007bff;
+}
+
+/* 요청 버튼 */
+#modalActionButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+#modalActionButton:hover {
+    background-color: #0056b3;
+}
+
+/* 반응형 테이블 스타일 */
+.management-section table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+/* 테이블을 감싸는 래퍼 추가 */
+.table-wrapper {
+    overflow-x: auto; /* 가로 스크롤 허용 */
+    -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
+}
+
+/* 작은 화면에서 글씨 크기 조정 */
+@media (max-width: 768px) {
+    .management-section th, .management-section td {
+        font-size: 0.8em; /* 글씨 크기 축소 */
+        padding: 8px;     /* 패딩 축소 */
+    }
+}
+
+// 페이징
+/* 전체 테이블과 페이징 감싸는 wrapper */
+.table-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* 테이블과 페이징 간격 */
+    align-items: center;
+}
+
+/* 테이블 스타일 */
+#filmTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+#filmTable th, #filmTable td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+#filmTable th {
+    background-color: #f4f4f4;
+}
+
+/* 페이징 버튼 영역 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* 버튼 간 간격 */
+}
+
+.pageButton {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    color: #333;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.pageButton:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.pageButton.active {
+    background-color: #0056b3;
+    color: white;
+    border-color: #0056b3;
+}
+
+ /* Footer 스타일 */
+ footer {
+     background-color: #007BFF;
+     color: #fff;
+     text-align: center;
+     padding: 10px;
+     margin-top: 20px;
+     font-size: 0.9em;
+ }
+
+ footer p {
+     margin: 0;
+ }
+
+
+</style>
+<body>
+<div class="container">
+    <header class="header">
+        <div class="logo">꼼마 필름 - Admin</div>
+    </header>
+
+    <section class="category-management">
+        <button id="brandBtn" onclick="loadBrandData()">브랜드</button>
+        <button id="filmBtn" onclick="loadFilmData()">필름</button>
+    </section>
+
+    <!-- 브랜드 관리 테이블 -->
+    <section id="brandSection" class="management-section" style="display:none;">
+        <h2>브랜드 관리</h2>
+        <div class="button-group" style="text-align: right;">
+            <button onclick="openBrandForm('add')">브랜드 생성</button>
+        </div>
+
+        <div class="table-wrapper">
+            <table id="brandTable">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>브랜드명</th>
+                    <th>URL</th>
+                    <th>작업</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- 브랜드 데이터가 동적으로 삽입됩니다. -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 필름 관리 테이블 -->
+    <section id="filmSection" class="management-section" style="display:none;">
+        <h2>필름 관리</h2>
+        <div class="button-group" style="text-align: right;">
+            <button onclick="openFilmForm('add')">필름 생성</button>
+        </div>
+
+        <div class="table-wrapper">
+            <table id="filmTable">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>브랜드명</th>
+                    <th>필름 코드</th>
+                    <th>필름 이름</th>
+                    <th>필름 색상</th>
+                    <th>이미지</th>
+                    <th>가격</th>
+                    <th>작업</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- 필름 데이터가 동적으로 삽입됩니다. -->
+                </tbody>
+            </table>
+            <!-- 페이징 버튼 -->
+            <div id="pagination" class="pagination"></div>
+        </div>
+    </section>
+
+    <!-- 모달 창 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <form id="modalForm">
+                <div id="modalInputs">
+                    <!-- 입력 필드가 동적으로 삽입됩니다 -->
+                </div>
+                <button type="button" id="modalActionButton" onclick="handleModalAction()">요청</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>꼼꼼한 마감 | Toy Project | For Friend</p>
+    </footer>
+</div>
+
+<script>
+    // const BASE_URL = "http://localhost:8090/comma-film";
+    // const BASE_URL = "http://ec2-13-125-146-134.ap-northeast-2.compute.amazonaws.com:8080/comma-film";
+    const BASE_URL = "http://dh-project.mooo.com:8090/comma-film";
+
+// 버튼 클릭 시 브랜드 데이터를 로드하는 함수
+function loadBrandData() {
+    // 기존 테이블을 숨기고 새로운 테이블을 보이게 한다
+    document.getElementById('filmSection').style.display = 'none';
+    document.getElementById('brandSection').style.display = 'block';
+
+    // API 호출 (브랜드 데이터 가져오기)
+    fetch(`${BASE_URL}/brand`)
+        .then(response => response.json())
+        .then(data => {
+            // 기존 테이블 데이터 비우기
+            const brandTableBody = document.querySelector('#brandTable tbody');
+            brandTableBody.innerHTML = '';
+
+            // 브랜드 데이터를 테이블에 추가
+            data.data.forEach(brand => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${brand.sn}</td>
+                    <td>${brand.name}</td>
+                    <td><a href="${brand.url}" target="_blank">${brand.url}</a></td>
+                    <td>
+                        <button class="editButton" onclick="openBrandForm('edit', {sn: '${brand.sn}', name: '${brand.name}', url: '${brand.url}'})">수정</button>
+                        <button class="deleteButton" onclick="openBrandForm('delete', {sn: '${brand.sn}'})">삭제</button>
+                    </td>
+                `;
+                brandTableBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error loading brand data:', error));
+}
+
+// 버튼 클릭 시 필름 데이터를 로드하는 함수
+function loadFilmData(page = 0) {
+    // 기존 테이블을 숨기고 새로운 테이블을 보이게 한다
+    document.getElementById('brandSection').style.display = 'none';
+    document.getElementById('filmSection').style.display = 'block';
+
+    // API 호출 (필름 데이터 가져오기)
+    fetch(`${BASE_URL}/film?page=${page}`)
+        .then(response => response.json())
+        .then(data => {
+            // 기존 테이블 데이터 비우기
+            const filmTableBody = document.querySelector('#filmTable tbody');
+            filmTableBody.innerHTML = '';
+
+            // 필름 데이터를 테이블에 추가
+            data.data.content.forEach(film => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${film.filmSn}</td>
+                    <td>${film.brandName}</td>
+                    <td>${film.filmCode}</td>
+                    <td>${film.filmName}</td>
+                    <td>${film.filmColor}</td>
+                    <td><img src="${film.filmImageUrl}" alt="${film.filmImageUrl}" width="50"></td>
+                    <td>${film.filmConsumerPrice}</td>
+                    <td>
+                        <button class="editButton" onclick="openFilmForm('edit', {sn: '${film.filmSn}', brandName: '${film.brandName}', filmCode: '${film.filmCode}', filmName: '${film.filmName}', filmColor: '${film.filmColor}', filmImageUrl: '${film.filmImageUrl}', filmConsumerPrice: '${film.filmConsumerPrice}'})">수정</button>
+                        <button class="deleteButton" onclick="openFilmForm('delete', {sn: '${film.filmSn}'})">삭제</button>
+                    </td>
+                `;
+                filmTableBody.appendChild(row);
+            });
+
+            // 페이징 처리
+            createPagination(data.data.totalPages, page);
+        })
+        .catch(error => console.error('Error loading film data:', error));
+}
+
+let currentAction = ""; // 현재 작업 (add, edit, delete)
+let currentType = ""; // 작업 대상 (brand, film)
+let sn = ""; // 작업할 sn
+
+// 브랜드 버튼 클릭
+function openBrandForm(action, row) {
+    currentAction = action;
+    currentType = "brand";
+
+    openModal(action, "브랜드", row);
+}
+
+// 필름 버튼 클릭
+function openFilmForm(action, row) {
+    currentAction = action;
+    currentType = "film";
+
+    openModal(action, "필름", row);
+}
+
+async function openModal(action, type, row = null) {
+    const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalInputs = document.getElementById("modalInputs");
+    const modalActionButton = document.getElementById("modalActionButton");
+
+    sn = row?.sn || "";
+
+    // 제목 설정
+    modalTitle.textContent = `${type} ${action === "add" ? "생성" : action === "edit" ? "수정" : "삭제"}`;
+
+    // 입력 필드 초기화
+    modalInputs.innerHTML = "";
+
+    // 입력 필드 설정
+    if (action === "add" || action === "edit") {
+        if (type === "브랜드") {
+            modalInputs.innerHTML = `
+                <div class="form-group">
+                    <label for="brandName">${type} 이름</label>
+                    <input type="text" id="brandName" name="brandName" value="${action === 'edit' && row ? row.name : ''}">
+                </div>
+                <div class="form-group">
+                    <label for="brandUrl">${type} URL</label>
+                    <input type="text" id="brandUrl" name="brandUrl" value="${action === 'edit' && row ? row.url : ''}">
+                </div>`;
+        }
+
+        // 필름 타입일 경우
+        if (type === "필름") {
+            modalInputs.innerHTML = `
+                <div class="form-group">
+                    <label for="filmBrand">브랜드</label>
+                    <select id="filmBrand" name="filmBrand">
+                        <option value="">브랜드를 선택하세요</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filmCode">필름 코드</label>
+                    <input type="text" id="filmCode" name="filmCode" value="${action === 'edit' && row ? row.filmCode : ''}">
+                </div>
+                <div class="form-group">
+                    <label for="filmName">${type} 이름</label>
+                    <input type="text" id="filmName" name="filmName" value="${action === 'edit' && row ? row.filmName : ''}">
+                </div>
+                <div class="form-group">
+                    <label for="filmColor">${type} 색상</label>
+                    <input type="text" id="filmColor" name="filmColor" value="${action === 'edit' && row ? row.filmColor : ''}">
+                </div>
+                ${action === 'edit' ? `
+                    <div class="form-group">
+                        <label>현재 이미지</label><br>
+                        <img id="currentFilmImage" src="${row ? row.filmImageUrl : ''}" alt="현재 이미지" style="max-width: 50%; height: auto;">
+                    </div>
+                ` : `
+                    <div class="form-group">
+                        <label for="filmImage">이미지 업로드</label>
+                        <input type="file" id="filmImage" name="filmImage" accept="image/*">
+                    </div>
+                `}
+                <div class="form-group">
+                    <label for="filmPrice">가격</label>
+                    <input type="number" id="filmPrice" name="filmPrice" value="${action === 'edit' && row ? row.filmConsumerPrice : '0'}" min="0">
+                </div>
+                `;
+
+            // 브랜드 목록을 가져오는 API 호출
+            try {
+                const brands = await fetchBrands();
+                const brandSelect = document.getElementById('filmBrand');
+
+                brands.data.forEach(brand => {
+                    const option = document.createElement('option');
+                    option.value = brand.sn;  // 브랜드 SN 값
+                    option.textContent = brand.name;  // 브랜드 명
+                    if (action === 'edit' && row && row.brandName === brand.name) {  // 이미 선택된 브랜드가 있으면 그 값을 선택하도록 설정
+                        option.selected = true;
+                    }
+                    brandSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("브랜드 목록을 가져오는 데 실패했습니다.", error);
+            }
+        }
+    }
+
+    // 삭제 작업 시 메시지만 표시
+    if (action === "delete") {
+        modalInputs.innerHTML = `<p>${type}를 삭제하시겠습니까?</p>`;
+    }
+
+    // 버튼 텍스트 설정
+    modalActionButton.textContent = action === "add" ? "생성" : action === "edit" ? "수정" : "삭제";
+
+    // 모달 표시
+    modal.style.display = "block";
+}
+
+
+// 모달 닫기
+function closeModal() {
+    const modal = document.getElementById("modal");
+    modal.style.display = "none";
+
+    // 상태 초기화
+    currentAction = "";
+    currentType = "";
+}
+
+// 요청 처리
+async function handleModalAction() {
+    const name = document.getElementById(`${currentType}Name`)?.value || "";
+    const url = document.getElementById(`brandUrl`)?.value || "";
+    const brandValue = document.getElementById('filmBrand')?.value || "";
+    const filmCode = document.getElementById("filmCode")?.value || "";
+    const filmColor = document.getElementById("filmColor")?.value || "";
+    const filmPrice = document.getElementById("filmPrice")?.value || "";
+    let filmImageUrl = "";  // 업로드된 이미지 URL을 저장할 변수
+
+    let apiUrl = "";
+    let method = "";
+    let body = null;
+
+    if (currentAction === "add" || currentAction === "edit") {
+
+        if (currentType === "brand") {
+            if(!name) {
+                alert("브랜드의 이름을 입력해주세요!");
+                return;
+            }
+
+            if(!url) {
+                alert("브랜드의 URL을 입력해주세요!");
+                return;
+            }
+
+            body = JSON.stringify({ name, url });
+        }
+
+        if (currentType === "film") {
+
+            if(!brandValue) {
+                alert("브랜드를 선택해주세요!");
+                return;
+            }
+
+            if(!filmCode) {
+                alert("필름 코드를 입력해주세요!");
+                return;
+            }
+
+            if (currentAction === "add") {
+                // 이미지 선택 후 업로드 시작
+                const filmImageInput = document.getElementById("filmImage");
+                const file = filmImageInput.files[0];
+
+                if (file) {
+                    // 파일이 있을 경우 이미지를 먼저 업로드하고, 업로드된 URL을 받아온다
+                    filmImageUrl = await uploadImageAndGetUrl(file);
+                    if (!filmImageUrl) {
+                        console.error("이미지 업로드 실패");
+                        return;  // 이미지 업로드 실패 시 요청을 진행하지 않음
+                    }
+                }
+
+                if(!filmImageUrl) {
+                    alert("필름 이미지를 넣어주세요!");
+                    return;
+                }
+                body = JSON.stringify([{ brandSn: parseInt(brandValue, 10), code: filmCode, name, color: filmColor, imageUrl: filmImageUrl, consumerPrice: parseInt(filmPrice, 10) }])
+            } else {
+                filmImageUrl = document.getElementById('currentFilmImage').src
+                body = JSON.stringify({ brandSn: parseInt(brandValue, 10), code: filmCode, name, color: filmColor, imageUrl: filmImageUrl, consumerPrice: parseInt(filmPrice, 10) })
+            }
+
+        }
+    }
+
+    if (currentAction === "add") {
+        apiUrl = `${BASE_URL}/${currentType}`;
+        method = "POST";
+    } else if (currentAction === "edit") {
+        apiUrl = `${BASE_URL}/${currentType}/${sn}`;
+        method = "PATCH";
+    } else if (currentAction === "delete") {
+        apiUrl = `${BASE_URL}/${currentType}/${sn}`;
+        method = "DELETE";
+    }
+
+    fetch(apiUrl, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: currentAction === "delete" ? null : body,
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            alert(`${currentType} ${currentAction === "add" ? "생성" : currentAction === "edit" ? "수정" : "삭제"} 완료`);
+            closeModal();
+            // 데이터 재로드 필요
+        })
+        .catch((error) => {
+            alert(`${currentType} ${currentAction === "add" ? "생성" : currentAction === "edit" ? "수정" : "삭제"} 실패`);
+        });
+}
+
+    // 브랜드 API 호출 함수
+    async function fetchBrands() {
+        try {
+            const response = await fetch(`${BASE_URL}/brand`);
+            const data = await response.json();
+            if (data.status === 200) {
+              return data
+            } else {
+                console.error('API 호출 실패:', data.message);
+            }
+        } catch (error) {
+            console.error('API 호출 중 오류 발생:', error);
+        }
+    }
+
+    // 이미지 업로드 함수
+    async function uploadImageAndGetUrl(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch(`${BASE_URL}/image/upload`, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('이미지 업로드 실패');
+            }
+
+            const data = await response.text();
+            return data;  // 서버에서 반환된 이미지 URL을 반환
+        } catch (error) {
+            console.error('이미지 업로드 실패:', error);
+            return null;  // 실패 시 null 반환
+        }
+    }
+
+    // 페이징 버튼 생성 함수
+    function createPagination(totalPages, currentPage) {
+        const paginationContainer = document.getElementById('pagination');
+        paginationContainer.innerHTML = ''; // 기존 버튼 초기화
+
+        for (let i = 0; i < totalPages; i++) {
+            const button = document.createElement('button');
+            button.textContent = i + 1; // 1부터 시작하도록 표시
+            button.classList.add('pageButton');
+            if (i === currentPage) {
+                button.classList.add('active'); // 현재 페이지 표시
+            }
+
+            // 버튼 클릭 시 해당 페이지의 데이터를 로드
+            button.onclick = () => loadFilmData(i);
+            paginationContainer.appendChild(button);
+        }
+    }
+
+
+
+
+</script>
+</body>
+</html>

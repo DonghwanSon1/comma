@@ -14,7 +14,7 @@ class BrandService(
 ) {
 
   fun searchBrand(): List<Brand> {
-    return brandRepository.findAll().sortedByDescending { it.sn }
+    return brandRepository.findAll().sortedBy { it.name }
   }
 
   @Transactional
