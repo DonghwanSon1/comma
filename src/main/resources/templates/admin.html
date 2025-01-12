@@ -780,7 +780,26 @@ async function handleModalAction() {
         const paginationContainer = document.getElementById('pagination');
         paginationContainer.innerHTML = ''; // 기존 버튼 초기화
 
-        for (let i = 0; i < totalPages; i++) {
+        // '<<', '<' 버튼 추가 (첫 페이지로, 이전 페이지로)
+        if (currentPage > 0) {
+            const firstButton = document.createElement('button');
+            firstButton.textContent = '<<';
+            firstButton.classList.add('pageButton');
+            firstButton.onclick = () => loadFilmData(0);
+            paginationContainer.appendChild(firstButton);
+
+            const prevButton = document.createElement('button');
+            prevButton.textContent = '<';
+            prevButton.classList.add('pageButton');
+            prevButton.onclick = () => loadFilmData(currentPage - 1);
+            paginationContainer.appendChild(prevButton);
+        }
+
+        // 페이지 번호 범위 설정 (현재 페이지를 기준으로 앞뒤 2페이지씩 보여주기)
+        const startPage = Math.max(0, currentPage - 2);  // 시작 페이지
+        const endPage = Math.min(totalPages - 1, currentPage + 2); // 끝 페이지
+
+        for (let i = startPage; i <= endPage; i++) {
             const button = document.createElement('button');
             button.textContent = i + 1; // 1부터 시작하도록 표시
             button.classList.add('pageButton');
@@ -788,9 +807,23 @@ async function handleModalAction() {
                 button.classList.add('active'); // 현재 페이지 표시
             }
 
-            // 버튼 클릭 시 해당 페이지의 데이터를 로드
             button.onclick = () => loadFilmData(i);
             paginationContainer.appendChild(button);
+        }
+
+        // '>', '>>' 버튼 추가 (다음 페이지로, 마지막 페이지로)
+        if (currentPage < totalPages - 1) {
+            const nextButton = document.createElement('button');
+            nextButton.textContent = '>';
+            nextButton.classList.add('pageButton');
+            nextButton.onclick = () => loadFilmData(currentPage + 1);
+            paginationContainer.appendChild(nextButton);
+
+            const lastButton = document.createElement('button');
+            lastButton.textContent = '>>';
+            lastButton.classList.add('pageButton');
+            lastButton.onclick = () => loadFilmData(totalPages - 1);
+            paginationContainer.appendChild(lastButton);
         }
     }
 
