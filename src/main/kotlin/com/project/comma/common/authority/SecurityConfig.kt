@@ -23,7 +23,7 @@ class SecurityConfig(
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
                 it
-//                    .antMatchers("//**").hasAuthority("ADMIN")
+//                    .antMatchers("/film/**").hasAuthority("ADMIN")
 //                    .antMatchers("//**").hasAuthority("USER")
                     .anyRequest().permitAll()
             }

@@ -55,7 +55,7 @@ class JwtTokenProvider {
     fun getAuthentication(token: String): Authentication {
         val claims: Claims = getClaims(token)
 
-        val auth = claims["auth"] ?: throw CommonException(CommonExceptionCode.INVALID_TOKEN)
+        val auth = claims["role"] ?: throw CommonException(CommonExceptionCode.INVALID_TOKEN)
         val userId = claims["userSn"] ?: throw CommonException(CommonExceptionCode.INVALID_TOKEN)
 
         // 권한 정보 추출
