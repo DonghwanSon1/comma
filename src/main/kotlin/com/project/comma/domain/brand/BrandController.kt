@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/brand")
+@RequestMapping("/api/brand")
 @Tag(name = "Brand", description = "브랜드 관련 API")
 class BrandController(
     private val brandService: BrandService

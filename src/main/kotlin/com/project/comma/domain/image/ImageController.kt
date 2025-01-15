@@ -15,7 +15,7 @@ import java.util.UUID
 import javax.servlet.http.HttpServletResponse
 
 @RestController
-@RequestMapping("/image")
+@RequestMapping("/api/image")
 @Tag(name = "Image", description = "이미지 관련 API")
 class ImageController(
     @Value("\${file.dir}")

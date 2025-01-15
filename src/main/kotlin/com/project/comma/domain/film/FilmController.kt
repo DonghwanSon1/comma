@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("/film")
+@RequestMapping("/api/film")
 @Tag(name = "Film", description = "필름지 관련 API")
 class FilmController(
     private val filmService: FilmService
