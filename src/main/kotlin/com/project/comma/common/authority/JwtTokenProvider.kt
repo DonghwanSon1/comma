@@ -89,6 +89,21 @@ class JwtTokenProvider {
         return false
     }
 
+    /**
+     * UserSn 값 추출하기
+     */
+    fun getUserSnFromToken(token: String): TokenExtraction {
+        val cleanedToken = token.trim().takeIf { it.startsWith("Bearer") }
+            ?.substring(7)
+            ?: token
+
+        val claims: Claims = getClaims(cleanedToken)
+        val userSn: Long = claims["userSn"]?.toString()?.toLong() ?: throw CommonException(CommonExceptionCode.INVALID_TOKEN)
+        val role: String = claims["role"]?.toString() ?: throw CommonException(CommonExceptionCode.INVALID_TOKEN)
+
+        return TokenExtraction(userSn, role)
+    }
+
     private fun getClaims(token: String): Claims =
         Jwts.parserBuilder()
             .setSigningKey(key)

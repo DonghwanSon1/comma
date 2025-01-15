@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import com.project.comma.domain.users.rqrs.LoginRq
 import com.project.comma.domain.users.rqrs.UserRq
+import com.project.comma.domain.users.rqrs.UserRs
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -50,5 +51,52 @@ class UsersService(
 
     return jwtTokenProvider.createToken(authentication)
   }
+
+  /**
+   * 회원 정보 조회
+   */
+  fun userInfo(userSn: Long): UserRs {
+    val user: Users = usersRepository.findById(userSn).orElseThrow{
+      CommonException(CommonExceptionCode.NOT_EXIST_USER_ID)
+    }
+
+    return UserRs(
+      sn = user.sn,
+      email = user.email,
+      name = user.name,
+      phone = user.phone,
+      salary = user.salary
+    )
+  }
+
+  /**
+   * 회원 정보 수정
+   */
+  @Transactional
+  fun userUpdate(userSn: Long, userRq: UserRq): String {
+    val user: Users = usersRepository.findById(userSn).orElseThrow{
+      CommonException(CommonExceptionCode.NOT_EXIST_USER_ID)
+    }
+
+    val password: String? = if (userRq.password.isNullOrEmpty()) null else passwordEncoder.encode(userRq.password)
+    usersRepository.save(user.updateUser(userRq, password))
+    return "회원 정보 수정되었습니다."
+  }
+
+  /**
+   * 유저 삭제
+   */
+  @Transactional
+  fun deleteUser(userSn: Long): String {
+    val user: Users = usersRepository.findById(userSn).orElseThrow{
+      CommonException(CommonExceptionCode.NOT_EXIST_USER_ID)
+    }
+
+    usersRoleService.deleteRole(user)
+    usersRepository.delete(user)
+
+    return "회원탈퇴가 완료되었습니다."
+  }
+
 
 }

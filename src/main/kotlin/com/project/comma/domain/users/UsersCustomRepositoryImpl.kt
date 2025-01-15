@@ -4,7 +4,7 @@ import com.project.comma.domain.userRole.QUsersRole
 import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
-import com.project.comma.domain.users.rqrs.UserRs
+import com.project.comma.domain.users.rqrs.UserDto
 
 @Repository
 class UsersCustomRepositoryImpl(private val queryFactory: JPAQueryFactory) : UsersCustomRepository {
@@ -12,11 +12,11 @@ class UsersCustomRepositoryImpl(private val queryFactory: JPAQueryFactory) : Use
     private val users: QUsers = QUsers.users
     private val userRole: QUsersRole = QUsersRole.usersRole
 
-    override fun findUserWithRoles(email: String): UserRs? {
+    override fun findUserWithRoles(email: String): UserDto? {
         return queryFactory
             .select(
                 Projections.fields(
-                    UserRs::class.java,
+                    UserDto::class.java,
                     users.sn,
                     users.email,
                     users.password,

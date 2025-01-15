@@ -1,7 +1,7 @@
 package com.project.comma.domain.users
 
-import com.project.comma.domain.users.rqrs.UserRs
+import com.project.comma.domain.users.rqrs.UserDto
 
 interface UsersCustomRepository {
-  fun findUserWithRoles(email: String): UserRs?
+  fun findUserWithRoles(email: String): UserDto?
 }

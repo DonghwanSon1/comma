@@ -1,6 +1,8 @@
 package com.project.comma.domain.users
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.project.comma.domain.brand.Brand
+import com.project.comma.domain.brand.rqrs.BrandRq
 import com.project.comma.domain.users.rqrs.UserRq
 import javax.persistence.*
 
@@ -44,5 +46,16 @@ class Users(
         fun from(sn: Long): Users {
             return Users(sn = sn)
         }
+    }
+
+    fun updateUser(userRq: UserRq, encryptedPassword: String?): Users {
+        return Users(
+            sn = this.sn,
+            email = this.email,
+            password = encryptedPassword ?: this.password,
+            name = userRq.name ?: this.name,
+            phone = userRq.phone ?: this.phone,
+            salary = userRq.salary ?: this.salary
+        )
     }
 }
