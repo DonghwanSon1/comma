@@ -43,5 +43,5 @@ jwt:
 file:
   dir: /images
 #  dir: /Users/sondonghwan/Desktop/images
-  imageUrl: http://dh-project.mooo.com:8090/comma-film/image
-#  imageUrl: http://localhost:8090/comma-film/image
+  imageUrl: http://dh-project.mooo.com:8090/comma-film/api/image
+#  imageUrl: http://localhost:8090/comma-film/api/image
