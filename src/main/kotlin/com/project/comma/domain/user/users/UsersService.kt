@@ -1,19 +1,20 @@
-package com.project.comma.domain.users
+package com.project.comma.domain.user.users
 
 
 import com.project.comma.common.authority.JwtTokenProvider
 import com.project.comma.common.authority.TokenInfo
 import com.project.comma.common.exception.CommonException
 import com.project.comma.common.exception.CommonExceptionCode
-import com.project.comma.domain.userRole.UsersRoleService
-import com.project.comma.domain.userRole.enums.Role
+import com.project.comma.domain.user.userRole.UsersRoleService
+import com.project.comma.domain.user.userRole.enums.Role
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import com.project.comma.domain.users.rqrs.LoginRq
-import com.project.comma.domain.users.rqrs.UserRq
-import com.project.comma.domain.users.rqrs.UserRs
+import com.project.comma.domain.user.users.rqrs.LoginRq
+import com.project.comma.domain.user.users.rqrs.UserRq
+import com.project.comma.domain.user.users.rqrs.UserRs
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.core.AuthenticationException
 import org.springframework.security.crypto.password.PasswordEncoder
 
 @Service
@@ -46,10 +47,14 @@ class UsersService(
    * 로그인 (토큰 발행)
    */
   fun login(loginRq: LoginRq): TokenInfo {
-    val authenticationToken = UsernamePasswordAuthenticationToken(loginRq.email, loginRq.password)
-    val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
+    try {
+      val authenticationToken = UsernamePasswordAuthenticationToken(loginRq.email, loginRq.password)
+      val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
 
-    return jwtTokenProvider.createToken(authentication)
+      return jwtTokenProvider.createToken(authentication)
+    } catch (e: AuthenticationException) {
+      throw CommonException(CommonExceptionCode.LOGIN_FAIL)
+    }
   }
 
   /**

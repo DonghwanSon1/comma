@@ -1,4 +1,4 @@
-package com.project.comma.domain.userRole
+package com.project.comma.domain.user.userRole
 
 import org.springframework.data.jpa.repository.JpaRepository
 

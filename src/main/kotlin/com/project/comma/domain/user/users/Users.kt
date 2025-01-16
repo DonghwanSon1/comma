@@ -1,9 +1,7 @@
-package com.project.comma.domain.users
+package com.project.comma.domain.user.users
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.project.comma.domain.brand.Brand
-import com.project.comma.domain.brand.rqrs.BrandRq
-import com.project.comma.domain.users.rqrs.UserRq
+import com.project.comma.domain.user.users.rqrs.UserRq
 import javax.persistence.*
 
 @Entity

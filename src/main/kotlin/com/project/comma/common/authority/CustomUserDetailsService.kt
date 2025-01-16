@@ -1,8 +1,8 @@
 package com.project.comma.common.authority
 
 import com.project.comma.common.response.CustomUser
-import com.project.comma.domain.users.UsersRepository
-import com.project.comma.domain.users.rqrs.UserDto
+import com.project.comma.domain.user.users.UsersRepository
+import com.project.comma.domain.user.users.rqrs.UserDto
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService

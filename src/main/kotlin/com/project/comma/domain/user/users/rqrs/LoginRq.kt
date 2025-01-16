@@ -1,4 +1,4 @@
-package com.project.comma.domain.users.rqrs
+package com.project.comma.domain.user.users.rqrs
 
 import io.swagger.v3.oas.annotations.media.Schema
 

@@ -1,10 +1,10 @@
-package com.project.comma.domain.users
+package com.project.comma.domain.user.users
 
-import com.project.comma.domain.userRole.QUsersRole
+import com.project.comma.domain.user.userRole.QUsersRole
 import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
-import com.project.comma.domain.users.rqrs.UserDto
+import com.project.comma.domain.user.users.rqrs.UserDto
 
 @Repository
 class UsersCustomRepositoryImpl(private val queryFactory: JPAQueryFactory) : UsersCustomRepository {

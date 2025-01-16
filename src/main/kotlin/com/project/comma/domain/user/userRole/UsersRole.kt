@@ -1,6 +1,6 @@
-package com.project.comma.domain.userRole
+package com.project.comma.domain.user.userRole
 
-import com.project.comma.domain.users.Users
+import com.project.comma.domain.user.users.Users
 import javax.persistence.*
 
 @Entity

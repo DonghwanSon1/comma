@@ -1,12 +1,12 @@
-package com.project.comma.domain.userRole
+package com.project.comma.domain.user.userRole
 
 
 import com.project.comma.common.exception.CommonException
 import com.project.comma.common.exception.CommonExceptionCode
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import com.project.comma.domain.userRole.enums.Role
-import com.project.comma.domain.users.Users
+import com.project.comma.domain.user.userRole.enums.Role
+import com.project.comma.domain.user.users.Users
 
 @Service
 @Transactional(readOnly = true)

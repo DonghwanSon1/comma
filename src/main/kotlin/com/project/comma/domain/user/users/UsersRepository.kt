@@ -1,4 +1,4 @@
-package com.project.comma.domain.users
+package com.project.comma.domain.user.users
 
 import org.springframework.data.jpa.repository.JpaRepository
 

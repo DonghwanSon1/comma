@@ -1,16 +1,14 @@
-package com.project.comma.domain.users
+package com.project.comma.domain.user.users
 
 import com.project.comma.common.authority.JwtTokenProvider
 import com.project.comma.common.authority.TokenExtraction
 import com.project.comma.common.authority.TokenInfo
 import com.project.comma.common.response.BaseResponse
-import com.project.comma.common.response.CustomUser
-import com.project.comma.domain.userRole.enums.Role
-import com.project.comma.domain.users.rqrs.LoginRq
-import com.project.comma.domain.users.rqrs.UserRq
-import com.project.comma.domain.users.rqrs.UserRs
+import com.project.comma.domain.user.userRole.enums.Role
+import com.project.comma.domain.user.users.rqrs.LoginRq
+import com.project.comma.domain.user.users.rqrs.UserRq
+import com.project.comma.domain.user.users.rqrs.UserRs
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 
 @RestController
