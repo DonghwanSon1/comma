@@ -1,16 +1,9 @@
 package com.project.comma.domain.construction.construction
 
-import com.project.comma.common.exception.CommonException
-import com.project.comma.common.exception.CommonExceptionCode
-import com.project.comma.domain.brand.Brand
-import com.project.comma.domain.construction.construction.rqrs.ConstructionDto
-import com.project.comma.domain.construction.construction.rqrs.ConstructionRq
-import com.project.comma.domain.film.Film
-import com.project.comma.domain.film.rqrs.FilmRq
+import com.project.comma.domain.construction.construction.rqrs.ConstructionRqDto
 import com.project.comma.domain.user.users.Users
 import java.time.LocalDate
 import java.time.LocalTime
-import java.util.Date
 import javax.persistence.*
 
 @Entity
@@ -51,7 +44,7 @@ class Construction(
 ) {
 
     companion object {
-        fun createConstruction(dto: ConstructionDto): Construction {
+        fun createConstruction(dto: ConstructionRqDto): Construction {
             return Construction(
                 user = dto.user,
                 location = dto.location,
@@ -66,7 +59,7 @@ class Construction(
         }
     }
 
-    fun updateConstruction(dto: ConstructionDto): Construction {
+    fun updateConstruction(dto: ConstructionRqDto): Construction {
         return Construction(
             sn = this.sn,
             user = this.user,

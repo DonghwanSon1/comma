@@ -5,6 +5,7 @@ import com.project.comma.common.authority.TokenExtraction
 import com.project.comma.common.exception.CommonException
 import com.project.comma.common.exception.CommonExceptionCode
 import com.project.comma.common.response.BaseResponse
+import com.project.comma.domain.construction.construction.rqrs.ConstructionReceiptRs
 import com.project.comma.domain.construction.construction.rqrs.ConstructionRq
 import com.project.comma.domain.user.users.Users
 import io.swagger.v3.oas.annotations.Operation
@@ -30,6 +31,16 @@ class ConstructionController(
     val resultMsg: String = constructionService.saveConstruction(rq)
     return BaseResponse(message = resultMsg)
   }
+
+  @GetMapping("/receipt/{constructionSn}")
+  @Operation(summary = "시공 내용 영수증", description = "시공의 내용을 영수증화 시켜 보여준다.")
+  fun searchConstructionReceipt(@PathVariable constructionSn: Long,
+                                @RequestHeader("Authorization") auth: String): BaseResponse<ConstructionReceiptRs> {
+    val tokenExtraction: TokenExtraction = jwtTokenProvider.getUserSnFromToken(auth)
+
+    return BaseResponse(data = constructionService.searchConstructionReceipt(constructionSn, tokenExtraction.userSn))
+  }
+
 
   @PutMapping("/{constructionSn}")
   @Operation(summary = "시공 내용 수정", description = "시공의 내용을 수정 합니다.")

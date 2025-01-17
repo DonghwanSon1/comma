@@ -17,7 +17,7 @@ data class ConstructionRq(
     @Schema(description = "총 인원")
     val totalPersonnel: Int,
 
-    @Schema(description = "총 인건비")
+    @Schema(description = "인당 인건비")
     val laborCost: Int,
 
     @Schema(description = "자재 및 부자재 사용량 (미터 기준)")
@@ -35,6 +35,9 @@ data class ConstructionRq(
     @Schema(description = "(미터 당) 부자재 시공자 가격")
     val subMaterialContractorPrice: Int,
 
+    @Schema(description = "식사 제공")
+    val meal: Boolean,
+
     @Schema(description = "시공 시작일")
     val startDate: String,
 
@@ -42,12 +45,3 @@ data class ConstructionRq(
     val startTime: String,
 
 )
-
-//총 인건비
-//540,000
-//
-//소비자 가격
-//110,000
-//
-//시공자 가격
-//20,000

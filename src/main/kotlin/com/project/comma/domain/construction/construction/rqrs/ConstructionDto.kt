@@ -8,51 +8,60 @@ import java.time.LocalTime
 
 data class ConstructionDto(
 
-    @Schema(description = "유저")
-    var user: Users,
+    // Construction Table
+    @Schema(description = "시공 Sn")
+    var sn: Long? = null,
 
     @Schema(description = "시공하는 곳")
-    val location: String,
+    val location: String? = null,
 
     @Schema(description = "총 인원")
-    val totalPersonnel: Int,
+    val totalPersonnel: Int? = null,
 
     @Schema(description = "총 인건비")
-    val totalLaborCost: Int,
+    val totalLaborCost: Int? = null,
 
-    @Schema(description = "자재 및 부자재의 총 소비자 가격")
-    val totalConsumerCost: Int,
+    @Schema(description = "총 자재 및 부자재 소비자 가격")
+    val totalConsumerCost: Int? = null,
 
-    @Schema(description = "자재 및 부자재의 총 시공자 가격")
-    val totalContractorCost: Int,
+    @Schema(description = "총 자재 및 부자재 시공자 가격")
+    val totalConstructorCost: Int? = null,
 
-    @Schema(description = "총 식비")
-    val totalMealCost: Int,
+    @Schema(description = "식사 총 가격")
+    val totalMealCost: Int? = null,
 
     @Schema(description = "시공 시작일")
-    val startDate: LocalDate,
+    val startDate: String? = null,
 
-    @Schema(description = "시공 시작시간")
-    val startTime: LocalTime,
+    @Schema(description = "시공 시작 시간")
+    val startTime: String? = null,
+
+
+    // Material Table
+    @Schema(description = "자재 및 부자재 사용량 (미터 기준)")
+    val quantity: Int? = null,
+
+    @Schema(description = "(미터 당) 자재 소비자 가격")
+    val materialConsumerPrice: Int? = null,
+
+    @Schema(description = "(미터 당) 자재 시공자 가격")
+    val materialConstructorPrice: Int? = null,
+
+
+    // SubMaterial Table
+    @Schema(description = "(미터 당) 부자재 소비자 가격")
+    val subMaterialConsumerPrice: Int? = null,
+
+    @Schema(description = "(미터 당) 부자재 시공자 가격")
+    val subMaterialConstructorPrice: Int? = null,
+
+
+    // User Table
+    @Schema(description = "시공 대표자")
+    val userName: String? = null,
+
+    @Schema(description = "시공 대표자 번호")
+    val userPhone: String? = null,
 
 ) {
-    companion object {
-        fun createConstructionDto(rq: ConstructionRq): ConstructionDto {
-            return ConstructionDto(
-                user = rq.user!!,
-                location = rq.location,
-                totalPersonnel = rq.totalPersonnel,
-                // 인원수 * 인건비, 총 인건비
-                totalLaborCost = rq.totalPersonnel * rq.laborCost,
-                // (사용량 * 소비자 자재값) + (사용량 * 소비자 부자재 값), 총 자재 및 부자재 소비자 가격
-                totalConsumerCost = (rq.quantity * rq.materialConsumerPrice) + (rq.quantity * rq.subMaterialConsumerPrice),
-                // (사용량 * 시공자 자재값) + (사용량 * 시공자 부자재 값), 총 자재 및 부자재 시공자 가격
-                totalContractorCost = (rq.quantity * rq.materialContractorPrice) + (rq.quantity * rq.subMaterialContractorPrice),
-                // 식대 값 (인당 10,000원)
-                totalMealCost = rq.totalPersonnel * ConstructionService.MEAL_COST_PER_PERSON,
-                startDate = LocalDate.parse(rq.startDate),
-                startTime = LocalTime.parse(rq.startTime)
-            )
-        }
-    }
 }

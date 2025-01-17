@@ -4,10 +4,11 @@ package com.project.comma.domain.construction.construction
 import com.project.comma.common.exception.CommonException
 import com.project.comma.common.exception.CommonExceptionCode
 import com.project.comma.domain.construction.construction.rqrs.ConstructionDto
+import com.project.comma.domain.construction.construction.rqrs.ConstructionRqDto
+import com.project.comma.domain.construction.construction.rqrs.ConstructionReceiptRs
 import com.project.comma.domain.construction.construction.rqrs.ConstructionRq
 import com.project.comma.domain.construction.material.MaterialService
 import com.project.comma.domain.construction.subMaterial.SubMaterialService
-import com.project.comma.domain.user.users.Users
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -26,7 +27,7 @@ class ConstructionService(
   @Transactional
   fun saveConstruction(rq: ConstructionRq): String {
 
-    val dto: ConstructionDto = ConstructionDto.createConstructionDto(rq)
+    val dto: ConstructionRqDto = ConstructionRqDto.createConstructionDto(rq)
 
     val constructionEntity: Construction = if (rq.sn == null) {
       Construction.createConstruction(dto)
@@ -49,6 +50,11 @@ class ConstructionService(
     }
   }
 
+  fun searchConstructionReceipt(constructionSn: Long, userSn: Long): ConstructionReceiptRs {
+
+    return constructionRepository.searchConstructionReceipt(constructionSn, userSn)
+      ?: throw CommonException(CommonExceptionCode.DOES_NOT_EXIST_CONSTRUCTION)
+  }
 
 
 }

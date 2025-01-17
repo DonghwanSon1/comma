@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import java.util.*
 
+
+// TODO 토큰 만료 시 RefreshToken 발급할 수 있도록 수정 필요.!
 @Component
 class JwtTokenProvider {
     @Value("\${jwt.secret}")
