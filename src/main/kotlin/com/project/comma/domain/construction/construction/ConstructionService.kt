@@ -3,14 +3,12 @@ package com.project.comma.domain.construction.construction
 
 import com.project.comma.common.exception.CommonException
 import com.project.comma.common.exception.CommonExceptionCode
-import com.project.comma.domain.construction.construction.rqrs.ConstructionDto
-import com.project.comma.domain.construction.construction.rqrs.ConstructionRqDto
-import com.project.comma.domain.construction.construction.rqrs.ConstructionReceiptRs
-import com.project.comma.domain.construction.construction.rqrs.ConstructionRq
+import com.project.comma.domain.construction.construction.rqrs.*
 import com.project.comma.domain.construction.material.MaterialService
 import com.project.comma.domain.construction.subMaterial.SubMaterialService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.YearMonth
 
 @Service
 @Transactional(readOnly = true)
@@ -48,6 +46,11 @@ class ConstructionService(
     else {
       "시공 정보를 성공적으로 수정되었습니다."
     }
+  }
+
+  fun searchConstruction(yearMonth: YearMonth, location: String?, userSn: Long): List<ConstructionRs>? {
+    return constructionRepository.searchConstruction(yearMonth, location, userSn)
+
   }
 
   fun searchConstructionReceipt(constructionSn: Long, userSn: Long): ConstructionReceiptRs {
