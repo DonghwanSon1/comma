@@ -1,5 +1,6 @@
 package com.project.comma.domain.construction.construction
 
+import com.project.comma.domain.construction.construction.rqrs.ConstructionDto
 import com.project.comma.domain.construction.construction.rqrs.ConstructionReceiptRs
 import com.project.comma.domain.construction.construction.rqrs.ConstructionRqDto
 import com.project.comma.domain.construction.construction.rqrs.ConstructionRs
@@ -12,4 +13,5 @@ import java.time.YearMonth
 interface ConstructionCustomRepository {
   fun searchConstructionReceipt(constructionSn: Long, userSn: Long): ConstructionReceiptRs?
   fun searchConstruction(yearMonth: YearMonth, location: String?, userSn: Long): List<ConstructionRs>?
+  fun searchRqConstruction(constructionSn: Long, userSn: Long): ConstructionDto?
 }

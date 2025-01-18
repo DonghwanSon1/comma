@@ -5,6 +5,7 @@ import com.project.comma.common.authority.TokenExtraction
 import com.project.comma.common.exception.CommonException
 import com.project.comma.common.exception.CommonExceptionCode
 import com.project.comma.common.response.BaseResponse
+import com.project.comma.domain.construction.construction.rqrs.ConstructionDetailRs
 import com.project.comma.domain.construction.construction.rqrs.ConstructionReceiptRs
 import com.project.comma.domain.construction.construction.rqrs.ConstructionRq
 import com.project.comma.domain.construction.construction.rqrs.ConstructionRs
@@ -12,6 +13,7 @@ import com.project.comma.domain.user.users.Users
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.*
+import java.time.DateTimeException
 import java.time.YearMonth
 
 @RestController
@@ -34,17 +36,22 @@ class ConstructionController(
     return BaseResponse(message = resultMsg)
   }
 
-  // TODO 영수증 전체 조회 (년도의 월별), 수정 할 수 있게 디테일 정보 조회
-  // -> 년/달 별로 조회하며, 장소로 검색할 수 있음. 년/달은 필수, 장소는 선택
-  // -> Rs는 sn, 시공일, 장소, 총 소비자 가격
+  // TODO 수정 할 수 있게 디테일 정보 조회
+  @GetMapping("/{constructionSn}")
+  @Operation(summary = "시공 내용 상세 조회", description = "시공의 상세 내용을 조회한다.")
+  fun searchDetailConstruction(@PathVariable constructionSn: Long,
+                         @RequestHeader("Authorization") auth: String): BaseResponse<ConstructionDetailRs> {
+    val tokenExtraction: TokenExtraction = jwtTokenProvider.getUserSnFromToken(auth)
+    return BaseResponse(data = constructionService.searchDetailConstruction(constructionSn, tokenExtraction.userSn))
+  }
+
   @GetMapping
   @Operation(summary = "시공 내용 조회", description = "년/달 별로 시공의 내용들을 조회한다.")
-  fun searchConstruction(@RequestParam yearMonth: String,
+  fun searchConstruction(@RequestParam yearMonth: YearMonth,
                          @RequestParam location: String?,
                          @RequestHeader("Authorization") auth: String): BaseResponse<List<ConstructionRs>> {
-    if (yearMonth.isNullOrEmpty()) throw CommonException(CommonExceptionCode.BAD_REQUEST)
     val tokenExtraction: TokenExtraction = jwtTokenProvider.getUserSnFromToken(auth)
-    return BaseResponse(data = constructionService.searchConstruction(YearMonth.parse(yearMonth), location, tokenExtraction.userSn))
+    return BaseResponse(data = constructionService.searchConstruction(yearMonth, location, tokenExtraction.userSn))
   }
 
   @GetMapping("/receipt/{constructionSn}")

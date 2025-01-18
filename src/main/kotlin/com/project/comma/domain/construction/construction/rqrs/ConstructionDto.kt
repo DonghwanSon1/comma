@@ -31,10 +31,10 @@ data class ConstructionDto(
     val totalMealCost: Int? = null,
 
     @Schema(description = "시공 시작일")
-    val startDate: String? = null,
+    val startDate: LocalDate? = null,
 
     @Schema(description = "시공 시작 시간")
-    val startTime: String? = null,
+    val startTime: LocalTime? = null,
 
 
     // Material Table

@@ -34,10 +34,10 @@ data class ConstructionReceiptRs(
     val totalMealCost: Int? = null,
 
     @Schema(description = "시공 대표자")
-    val userName: String? = null,
+    val constructorName: String? = null,
 
     @Schema(description = "시공 대표자 번호")
-    val userPhone: String? = null,
+    val constructorPhone: String? = null,
 ){
     val totalConsumerCost: Int
         get() = totalLaborCost!! + totalMatSubCost!! + totalMealCost!!

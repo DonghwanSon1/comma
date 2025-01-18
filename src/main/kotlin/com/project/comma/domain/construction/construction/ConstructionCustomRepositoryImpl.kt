@@ -1,6 +1,7 @@
 package com.project.comma.domain.construction.construction
 
 import com.project.comma.domain.brand.QBrand
+import com.project.comma.domain.construction.construction.rqrs.ConstructionDto
 import com.project.comma.domain.construction.construction.rqrs.ConstructionReceiptRs
 import com.project.comma.domain.construction.construction.rqrs.ConstructionRqDto
 import com.project.comma.domain.construction.construction.rqrs.ConstructionRs
@@ -41,8 +42,8 @@ class ConstructionCustomRepositoryImpl(private val queryFactory: JPAQueryFactory
                     construction.startDate,
                     construction.startTime,
                     material.quantity,
-                    user.name.`as`("userName"),
-                    user.phone.`as`("userPhone")
+                    user.name.`as`("constructorName"),
+                    user.phone.`as`("constructorPhone")
                 )
             )
             .from(construction)
@@ -73,11 +74,36 @@ class ConstructionCustomRepositoryImpl(private val queryFactory: JPAQueryFactory
             )
             .from(construction)
             .where(construction.startDate.between(startDate, endDate),
-//                construction.startDate.year().eq(yearMonth.year),
-//                construction.startDate.month().eq(yearMonth.monthValue),
                 builder)
+            .orderBy(construction.startDate.asc(),
+                construction.startTime.asc())
             .fetch()
-
     }
 
+    override fun searchRqConstruction(constructionSn: Long, userSn: Long): ConstructionDto? {
+        return queryFactory
+            .select(
+                Projections.fields(
+                    ConstructionDto::class.java,
+                    construction.sn,
+                    construction.location,
+                    construction.totalPersonnel,
+                    construction.totalLaborCost,
+                    material.quantity,
+                    material.consumerPrice.`as`("materialConsumerPrice"),
+                    material.contractorPrice.`as`("materialConstructorPrice"),
+                    subMaterial.consumerPrice.`as`("subMaterialConsumerPrice"),
+                    subMaterial.contractorPrice.`as`("subMaterialConstructorPrice"),
+                    construction.totalMealCost,
+                    construction.startDate,
+                    construction.startTime
+                )
+            )
+            .from(construction)
+            .join(material).on(construction.eq(material.construction))
+            .join(subMaterial).on(construction.eq(subMaterial.construction))
+            .where(construction.user.sn.eq(userSn),
+                construction.sn.eq(constructionSn))
+            .fetchOne()
+    }
 }

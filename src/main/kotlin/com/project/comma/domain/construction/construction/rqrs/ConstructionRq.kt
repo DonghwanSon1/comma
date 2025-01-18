@@ -2,6 +2,8 @@ package com.project.comma.domain.construction.construction.rqrs
 
 import com.project.comma.domain.user.users.Users
 import io.swagger.v3.oas.annotations.media.Schema
+import java.time.LocalDate
+import java.time.LocalTime
 
 data class ConstructionRq(
 
@@ -39,9 +41,9 @@ data class ConstructionRq(
     val meal: Boolean,
 
     @Schema(description = "시공 시작일")
-    val startDate: String,
+    val startDate: LocalDate,
 
     @Schema(description = "시공 시작 시간")
-    val startTime: String,
+    val startTime: LocalTime,
 
-)
+    )

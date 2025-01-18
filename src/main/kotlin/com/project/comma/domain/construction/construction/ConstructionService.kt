@@ -48,13 +48,27 @@ class ConstructionService(
     }
   }
 
+  /**
+   * 시공 내용들 조회
+   */
   fun searchConstruction(yearMonth: YearMonth, location: String?, userSn: Long): List<ConstructionRs>? {
     return constructionRepository.searchConstruction(yearMonth, location, userSn)
-
   }
 
-  fun searchConstructionReceipt(constructionSn: Long, userSn: Long): ConstructionReceiptRs {
+  /**
+   * 시공 상세 조회
+   */
+  fun searchDetailConstruction(constructionSn: Long, userSn: Long): ConstructionDetailRs {
+    val dto: ConstructionDto = constructionRepository.searchRqConstruction(constructionSn, userSn)
+      ?: throw CommonException(CommonExceptionCode.DOES_NOT_EXIST_CONSTRUCTION)
 
+    return ConstructionDetailRs.from(dto)
+  }
+
+  /**
+   * 시공 영수증 조회
+   */
+  fun searchConstructionReceipt(constructionSn: Long, userSn: Long): ConstructionReceiptRs {
     return constructionRepository.searchConstructionReceipt(constructionSn, userSn)
       ?: throw CommonException(CommonExceptionCode.DOES_NOT_EXIST_CONSTRUCTION)
   }

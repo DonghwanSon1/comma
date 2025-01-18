@@ -50,8 +50,8 @@ data class ConstructionRqDto(
                 totalContractorCost = (rq.quantity * rq.materialContractorPrice) + (rq.quantity * rq.subMaterialContractorPrice),
                 // 식대 값 (인당 10,000원)
                 totalMealCost = if (rq.meal) rq.totalPersonnel * ConstructionService.MEAL_COST_PER_PERSON else 0,
-                startDate = LocalDate.parse(rq.startDate),
-                startTime = LocalTime.parse(rq.startTime)
+                startDate = rq.startDate,
+                startTime = rq.startTime
             )
         }
     }
