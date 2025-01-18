@@ -42,8 +42,8 @@ class ConstructionCustomRepositoryImpl(private val queryFactory: JPAQueryFactory
                     construction.startDate,
                     construction.startTime,
                     material.quantity,
-                    user.name.`as`("constructorName"),
-                    user.phone.`as`("constructorPhone")
+                    user.name.`as`("contractorName"),
+                    user.phone.`as`("contractorPhone")
                 )
             )
             .from(construction)
@@ -74,6 +74,7 @@ class ConstructionCustomRepositoryImpl(private val queryFactory: JPAQueryFactory
             )
             .from(construction)
             .where(construction.startDate.between(startDate, endDate),
+                construction.user.sn.eq(userSn),
                 builder)
             .orderBy(construction.startDate.asc(),
                 construction.startTime.asc())
@@ -91,9 +92,9 @@ class ConstructionCustomRepositoryImpl(private val queryFactory: JPAQueryFactory
                     construction.totalLaborCost,
                     material.quantity,
                     material.consumerPrice.`as`("materialConsumerPrice"),
-                    material.contractorPrice.`as`("materialConstructorPrice"),
+                    material.contractorPrice.`as`("materialContractorPrice"),
                     subMaterial.consumerPrice.`as`("subMaterialConsumerPrice"),
-                    subMaterial.contractorPrice.`as`("subMaterialConstructorPrice"),
+                    subMaterial.contractorPrice.`as`("subMaterialContractorPrice"),
                     construction.totalMealCost,
                     construction.startDate,
                     construction.startTime
@@ -105,5 +106,30 @@ class ConstructionCustomRepositoryImpl(private val queryFactory: JPAQueryFactory
             .where(construction.user.sn.eq(userSn),
                 construction.sn.eq(constructionSn))
             .fetchOne()
+    }
+
+    override fun searchConstructionAdjustment(yearMonth: YearMonth, userSn: Long): List<ConstructionDto>? {
+        val startDate: LocalDate = yearMonth.atDay(1)
+        val endDate: LocalDate = yearMonth.atEndOfMonth()
+
+        return queryFactory
+            .select(
+                Projections.fields(
+                    ConstructionDto::class.java,
+                    construction.sn,
+                    construction.location,
+                    construction.totalLaborCost,
+                    construction.totalConsumerCost,
+                    construction.totalContractorCost,
+                    construction.totalMealCost
+                )
+            )
+            .from(construction)
+            .where(construction.startDate.between(startDate, endDate),
+                construction.user.sn.eq(userSn))
+            .orderBy(construction.startDate.asc(),
+                construction.startTime.asc())
+            .fetch()
+
     }
 }

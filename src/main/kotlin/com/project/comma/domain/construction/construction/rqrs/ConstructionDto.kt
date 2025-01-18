@@ -25,7 +25,7 @@ data class ConstructionDto(
     val totalConsumerCost: Int? = null,
 
     @Schema(description = "총 자재 및 부자재 시공자 가격")
-    val totalConstructorCost: Int? = null,
+    val totalContractorCost: Int? = null,
 
     @Schema(description = "식사 총 가격")
     val totalMealCost: Int? = null,
@@ -45,7 +45,7 @@ data class ConstructionDto(
     val materialConsumerPrice: Int? = null,
 
     @Schema(description = "(미터 당) 자재 시공자 가격")
-    val materialConstructorPrice: Int? = null,
+    val materialContractorPrice: Int? = null,
 
 
     // SubMaterial Table
@@ -53,7 +53,7 @@ data class ConstructionDto(
     val subMaterialConsumerPrice: Int? = null,
 
     @Schema(description = "(미터 당) 부자재 시공자 가격")
-    val subMaterialConstructorPrice: Int? = null,
+    val subMaterialContractorPrice: Int? = null,
 
 
     // User Table
@@ -62,6 +62,5 @@ data class ConstructionDto(
 
     @Schema(description = "시공 대표자 번호")
     val userPhone: String? = null,
-
 ) {
 }

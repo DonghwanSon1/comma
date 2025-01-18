@@ -5,10 +5,7 @@ import com.project.comma.common.authority.TokenExtraction
 import com.project.comma.common.exception.CommonException
 import com.project.comma.common.exception.CommonExceptionCode
 import com.project.comma.common.response.BaseResponse
-import com.project.comma.domain.construction.construction.rqrs.ConstructionDetailRs
-import com.project.comma.domain.construction.construction.rqrs.ConstructionReceiptRs
-import com.project.comma.domain.construction.construction.rqrs.ConstructionRq
-import com.project.comma.domain.construction.construction.rqrs.ConstructionRs
+import com.project.comma.domain.construction.construction.rqrs.*
 import com.project.comma.domain.user.users.Users
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -36,17 +33,16 @@ class ConstructionController(
     return BaseResponse(message = resultMsg)
   }
 
-  // TODO 수정 할 수 있게 디테일 정보 조회
   @GetMapping("/{constructionSn}")
   @Operation(summary = "시공 내용 상세 조회", description = "시공의 상세 내용을 조회한다.")
   fun searchDetailConstruction(@PathVariable constructionSn: Long,
-                         @RequestHeader("Authorization") auth: String): BaseResponse<ConstructionDetailRs> {
+                               @RequestHeader("Authorization") auth: String): BaseResponse<ConstructionDetailRs> {
     val tokenExtraction: TokenExtraction = jwtTokenProvider.getUserSnFromToken(auth)
     return BaseResponse(data = constructionService.searchDetailConstruction(constructionSn, tokenExtraction.userSn))
   }
 
   @GetMapping
-  @Operation(summary = "시공 내용 조회", description = "년/달 별로 시공의 내용들을 조회한다.")
+  @Operation(summary = "한달 간 시공 내용 조회", description = "한달 간 시공 내용들을 조회한다.")
   fun searchConstruction(@RequestParam yearMonth: YearMonth,
                          @RequestParam location: String?,
                          @RequestHeader("Authorization") auth: String): BaseResponse<List<ConstructionRs>> {
@@ -60,6 +56,18 @@ class ConstructionController(
                                 @RequestHeader("Authorization") auth: String): BaseResponse<ConstructionReceiptRs> {
     val tokenExtraction: TokenExtraction = jwtTokenProvider.getUserSnFromToken(auth)
     return BaseResponse(data = constructionService.searchConstructionReceipt(constructionSn, tokenExtraction.userSn))
+  }
+
+  // TODO 정산 내역 조회
+  // 한달 간으로 조회
+  // -> sn, 시공 위치, 매출, 비용, 순이익 --> 리스트
+  // -> 총 매출, 총 비용, 최종 수익
+  @GetMapping("/adjustment")
+  @Operation(summary = "한달 간 시공 정산", description = "한달 간 시공의 정산 내용들을 보여준다.")
+  fun searchConstructionAdjustment(@RequestParam yearMonth: YearMonth,
+                                   @RequestHeader("Authorization") auth: String): BaseResponse<ConstructionAdjustmentRs> {
+    val tokenExtraction: TokenExtraction = jwtTokenProvider.getUserSnFromToken(auth)
+    return BaseResponse(data = constructionService.searchConstructionAdjustment(yearMonth, tokenExtraction.userSn))
   }
 
   @PutMapping("/{constructionSn}")

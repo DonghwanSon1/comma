@@ -14,4 +14,5 @@ interface ConstructionCustomRepository {
   fun searchConstructionReceipt(constructionSn: Long, userSn: Long): ConstructionReceiptRs?
   fun searchConstruction(yearMonth: YearMonth, location: String?, userSn: Long): List<ConstructionRs>?
   fun searchRqConstruction(constructionSn: Long, userSn: Long): ConstructionDto?
+  fun searchConstructionAdjustment(yearMonth: YearMonth, userSn: Long): List<ConstructionDto>?
 }

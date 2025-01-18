@@ -52,9 +52,9 @@ data class ConstructionDetailRs(
                 laborCost = (dto.totalLaborCost!! / dto.totalPersonnel!!),
                 quantity = dto.quantity,
                 materialConsumerPrice = dto.materialConsumerPrice,
-                materialContractorPrice = dto.materialConstructorPrice,
+                materialContractorPrice = dto.materialContractorPrice,
                 subMaterialConsumerPrice = dto.subMaterialConsumerPrice,
-                subMaterialContractorPrice = dto.subMaterialConstructorPrice,
+                subMaterialContractorPrice = dto.subMaterialContractorPrice,
                 meal = dto.totalMealCost != 0,
                 startDate = dto.startDate,
                 startTime = dto.startTime
