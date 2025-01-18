@@ -76,4 +76,14 @@ class ConstructionController(
     return BaseResponse(message = resultMsg)
   }
 
+  @DeleteMapping("/{constructionSn}")
+  @Operation(summary = "시공 내용 삭제", description = "시공의 내용을 삭제 합니다.")
+  fun deleteConstruction(@PathVariable constructionSn: Long,
+                         @RequestHeader("Authorization") auth: String): BaseResponse<Unit> {
+
+    val tokenExtraction: TokenExtraction = jwtTokenProvider.getUserSnFromToken(auth)
+    val resultMsg: String = constructionService.deleteConstruction(constructionSn, tokenExtraction.userSn)
+    return BaseResponse(message = resultMsg)
+  }
+
 }

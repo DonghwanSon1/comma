@@ -6,6 +6,7 @@ import com.project.comma.common.exception.CommonExceptionCode
 import com.project.comma.domain.construction.construction.rqrs.*
 import com.project.comma.domain.construction.material.MaterialService
 import com.project.comma.domain.construction.subMaterial.SubMaterialService
+import com.project.comma.domain.user.users.Users
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.YearMonth
@@ -20,6 +21,31 @@ class ConstructionService(
   companion object {
     // 고정값을 상수로 선언 (식대)
     const val MEAL_COST_PER_PERSON = 10000
+  }
+
+  /**
+   * 시공 내용들 조회
+   */
+  fun searchConstruction(yearMonth: YearMonth, location: String?, userSn: Long): List<ConstructionRs>? {
+    return constructionRepository.searchConstruction(yearMonth, location, userSn)
+  }
+
+  /**
+   * 시공 상세 조회
+   */
+  fun searchDetailConstruction(constructionSn: Long, userSn: Long): ConstructionDetailRs {
+    val dto: ConstructionDto = constructionRepository.searchRqConstruction(constructionSn, userSn)
+      ?: throw CommonException(CommonExceptionCode.DOES_NOT_EXIST_CONSTRUCTION)
+
+    return ConstructionDetailRs.from(dto)
+  }
+
+  /**
+   * 시공 영수증 조회
+   */
+  fun searchConstructionReceipt(constructionSn: Long, userSn: Long): ConstructionReceiptRs {
+    return constructionRepository.searchConstructionReceipt(constructionSn, userSn)
+      ?: throw CommonException(CommonExceptionCode.DOES_NOT_EXIST_CONSTRUCTION)
   }
 
   @Transactional
@@ -48,30 +74,17 @@ class ConstructionService(
     }
   }
 
-  /**
-   * 시공 내용들 조회
-   */
-  fun searchConstruction(yearMonth: YearMonth, location: String?, userSn: Long): List<ConstructionRs>? {
-    return constructionRepository.searchConstruction(yearMonth, location, userSn)
-  }
-
-  /**
-   * 시공 상세 조회
-   */
-  fun searchDetailConstruction(constructionSn: Long, userSn: Long): ConstructionDetailRs {
-    val dto: ConstructionDto = constructionRepository.searchRqConstruction(constructionSn, userSn)
+  @Transactional
+  fun deleteConstruction(constructionSn: Long, userSn: Long): String {
+    // 부모 테이블인 Construction 만 삭제해도 하위 자식테이블들 삭제 된다 => ( ON DELETE CASCADE 설정 )
+    val entity: Construction = constructionRepository.findBySnAndUser(constructionSn, Users.from(userSn))
       ?: throw CommonException(CommonExceptionCode.DOES_NOT_EXIST_CONSTRUCTION)
 
-    return ConstructionDetailRs.from(dto)
+    constructionRepository.delete(entity)
+    return "성공적으로 삭제했습니다."
   }
 
-  /**
-   * 시공 영수증 조회
-   */
-  fun searchConstructionReceipt(constructionSn: Long, userSn: Long): ConstructionReceiptRs {
-    return constructionRepository.searchConstructionReceipt(constructionSn, userSn)
-      ?: throw CommonException(CommonExceptionCode.DOES_NOT_EXIST_CONSTRUCTION)
-  }
+
 
 
 }
